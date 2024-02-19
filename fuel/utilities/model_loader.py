@@ -33,15 +33,13 @@ def convert_model(path:Path):
         ir_model = ov.convert_model(ttf_model_path)
         ov.save_model(ir_model, ir_model_path)
 
-def load_model(path:Path) -> ov.Model:
-    ir_model_path = Path().joinpath(path, TTF_SELFIE_MODEL_NAME).with_suffix(IR_MODEL_SUFFIX)
-    core = ov.Core()
-    return core.read_model(ir_model_path)
-
-def load_segmentation_model(path) -> ov.Model:
+def load_segmentation_model(path, device) -> ov.CompiledModel:
     if path is None or len(path) < 1:
         model_path = Path().joinpath(MAIN_SCRIPT_DIR, DEFAULT_MODELS_DIR,
                                      SEGMENTATION_MODEL_DIR, SEGMENTATION_MODEL_NAME)
         download_model(model_path)
         convert_model(model_path)
-    return load_model(model_path)
+    ir_model_path = Path().joinpath(model_path, TTF_SELFIE_MODEL_NAME).with_suffix(IR_MODEL_SUFFIX)
+    core = ov.Core()
+    model =  core.read_model(ir_model_path)
+    return core.compile_model(model, device)
