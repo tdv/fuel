@@ -4,7 +4,7 @@ ARG_SOURCE = "source"
 SOURCE_FILE = "file"
 SOURCE_WEBCAM = "webcam"
 
-ARG_SRC_IMAGE_FILE = "input-image-file"
+ARG_SRC_IMAGE_FILE = "input_image_file"
 ARG_SRC_WEBCAM = "webcam"
 
 ARG_DESTINATION = "destination"
@@ -12,7 +12,7 @@ DEST_FAKE_WEBCAM = "fakecam"
 DEST_IMAGE_FILE = "file"
 DEST_WINDOW = "window"
 
-ARG_DEST_IMAGE_FILE = "output-image-file"
+ARG_DEST_IMAGE_FILE = "output_image_file"
 
 ARG_DEST_FAKECAM = "fakecam"
 
