@@ -33,6 +33,7 @@ class Background:
         return res
 
     def _process_img(self, img:cv2.Mat):
+        img = self._adjust_gamma(img, 1.7)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         padded_img, pad_info = self._resize_and_pad(np.array(img))
         normalized_img = np.expand_dims(padded_img.astype(np.float32) / 255, 0)
@@ -43,7 +44,14 @@ class Background:
         bg_image = self.get_bg_image(img)
         condition = np.stack((postprocessed_mask,) * 3, axis=-1) > 0.5
         output_image = np.where(condition, image_data, bg_image)
+        output_image = self._adjust_gamma(output_image, 0.5)
         return output_image.astype(np.uint8)
+
+    def _adjust_gamma(slef, img:cv2.Mat, gamma=1.0) ->cv2.Mat :
+        gamma = 1.0 / gamma
+        tbl = np.array([((i / 255.0) ** gamma) * 255
+                        for i in np.arange(0, 256)]).astype(np.uint8)
+        return cv2.LUT(img, tbl)
 
     def _resize_and_pad(self, image: np.ndarray, height: int = 256, width: int = 256):
         h, w = image.shape[:2]
