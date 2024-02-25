@@ -11,7 +11,7 @@ def make_source(args) -> vi.ImageSource:
     if t == u.SOURCE_FILE:
         return source.ImageFile(args.get(u.ARG_SRC_IMAGE_FILE))
     if t == u.SOURCE_WEBCAM:
-        return source.WebCam(args.get(u.ARG_SRC_WEBCAM))
+        return source.WebCam(filename=args.get(u.ARG_SRC_WEBCAM))
     raise ValueError("Unknown source type \"{}\"".format(str(t)))
 
 def make_receiver(args) -> vi.ImageReceiver:
@@ -29,11 +29,14 @@ if __name__ == "__main__" :
     src = make_source(args)
     out = make_receiver(args)
     model = model_loader.load_segmentation_model(None, "GPU")
-    processor = bg.Background(model, bg_color=(120, 120, 120))
+    processor = bg.Background(model=model,
+                              blur=args.get(u.ARG_MODE) == u.MODE_BLUR,
+                              ksize=int(args.get(u.BLUR_KERNEL_SIZE)),
+                              bg_color=(120, 120, 120),
+                              bg_filename=args.get(u.BACKGROUND_FILENAME)
+                              )
 
-    while (True):
-        if cv2.waitKey(10) == 27:
-            break
+    while (cv2.waitKey(10) != 27):
         img = src.get_image()
         res = processor.process(img)
         out.receive_image(res)

@@ -16,6 +16,14 @@ ARG_DEST_IMAGE_FILE = "output_image_file"
 
 ARG_DEST_FAKECAM = "fakecam"
 
+ARG_MODE = "mode"
+MODE_BLUR = "blur"
+MODE_BACKGRAUND = "background"
+
+BLUR_KERNEL_SIZE = "blur_kernel_size"
+
+BACKGROUND_FILENAME = "background"
+
 def get_args():
     parser = argparse.ArgumentParser(description="Background substitutino or blur arguments",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -38,13 +46,14 @@ def get_args():
     parser.add_argument("-o", "--{}".format(ARG_DEST_IMAGE_FILE),
                         help="output file path",
                         default=None)
-    parser.add_argument("-m", "--mode",
-                        help="mode: blur or background substitution (blur|background)",
-                        default="blur")
-    parser.add_argument("-k", "--blur-kernel-size",
+    parser.add_argument("-m", "--{}".format(ARG_MODE),
+                        help="mode: {} or {} substitution (blur|background)"
+                        .format(MODE_BLUR, MODE_BACKGRAUND),
+                        default=MODE_BLUR)
+    parser.add_argument("-k", "--{}".format(BLUR_KERNEL_SIZE),
                         help="gaussianblur kernel size (only for 'blur' mode)",
                         default="55")
-    parser.add_argument("-b", "--background",
+    parser.add_argument("-b", "--{}".format(BACKGROUND_FILENAME),
                         help="background file path (only for 'background' mode)",
                         default=None)
     args = parser.parse_args()

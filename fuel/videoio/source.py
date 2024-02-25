@@ -19,6 +19,9 @@ class WebCam(ImageSource):
         if not self._cam.isOpened():
             raise RuntimeError("Failed to open webcam \"{}\"".format(filename))
 
+        self._cam.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
+        self._cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+
     def __del__(self):
         self._cam.release()
 
