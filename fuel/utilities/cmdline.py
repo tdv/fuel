@@ -52,7 +52,7 @@ def get_args():
                         default=MODE_BLUR)
     parser.add_argument("-k", "--{}".format(BLUR_KERNEL_SIZE),
                         help="gaussianblur kernel size (only for 'blur' mode)",
-                        default="55")
+                        default=55, type=int)
     parser.add_argument("-b", "--{}".format(BACKGROUND_FILENAME),
                         help="background file path (only for 'background' mode)",
                         default=None)

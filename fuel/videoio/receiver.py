@@ -30,7 +30,7 @@ class ImageFile(ImageReceiver):
 
 class FakeCam(ImageReceiver):
     _cam = None
-    def __init__(self, device:str, width:int = 640, height:int = 480, fps:int = 30):
+    def __init__(self, device:str, width:int = 800, height:int = 600, fps:int = 30):
         self._cam = fcam.Camera(device=device, width=width, height=height, fps=fps)
 
     def __del__(self):

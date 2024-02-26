@@ -33,18 +33,19 @@ class Background:
         return res
 
     def _process_img(self, img:cv2.Mat):
-        img = self._adjust_gamma(img, 1.7)
+        img = self._equalize_hist(img)
+        original_img = img.copy()
+        img = self._adjust_gamma(img, 2.5)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         padded_img, pad_info = self._resize_and_pad(np.array(img))
         normalized_img = np.expand_dims(padded_img.astype(np.float32) / 255, 0)
         out = self._model(normalized_img)[0]
-        image_data = np.array(img)
+        image_data = np.array(original_img)
         orig_img_shape = image_data.shape
         postprocessed_mask = self._postprocess_mask(out, pad_info, orig_img_shape[:2])
-        bg_image = self.get_bg_image(img)
+        bg_image = self.get_bg_image(original_img)
         condition = np.stack((postprocessed_mask,) * 3, axis=-1) > 0.5
         output_image = np.where(condition, image_data, bg_image)
-        output_image = self._adjust_gamma(output_image, 0.5)
         return output_image.astype(np.uint8)
 
     def _adjust_gamma(slef, img:cv2.Mat, gamma=1.0) ->cv2.Mat :
@@ -52,6 +53,12 @@ class Background:
         tbl = np.array([((i / 255.0) ** gamma) * 255
                         for i in np.arange(0, 256)]).astype(np.uint8)
         return cv2.LUT(img, tbl)
+
+    def _equalize_hist(self, img:cv2.Mat) -> cv2.Mat :
+        yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+        clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(2, 2))
+        yuv[:, :, 0] = clahe.apply(yuv[:, :, 0])
+        return cv2.cvtColor(yuv, cv2.COLOR_YUV2BGR)
 
     def _resize_and_pad(self, image: np.ndarray, height: int = 256, width: int = 256):
         h, w = image.shape[:2]
@@ -94,6 +101,7 @@ class Background:
                 if self._bg_image is None:
                     bg_image = cv2.imread(self._bg_filename)
                     bg_image = cv2.resize(bg_image, dsize=(shape[1], shape[0]), interpolation=cv2.INTER_NEAREST)
+                    bg_image = self._equalize_hist(bg_image)
                     bg_image = cv2.cvtColor(bg_image, cv2.COLOR_BGR2RGB)
                 else:
                     bg_image = self._bg_image.copy()
