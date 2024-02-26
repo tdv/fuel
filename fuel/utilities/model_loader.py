@@ -1,5 +1,7 @@
-import sys, os
+import os
+import sys
 from pathlib import Path
+
 import openvino as ov
 
 MAIN_SCRIPT_DIR = os.path.dirname(os.path.abspath(str(sys.modules['__main__'].__file__)))

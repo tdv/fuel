@@ -1,10 +1,11 @@
 import cv2
 
+import videoio.interface as vi
+from processing import background as bg
 from utilities import cmdline as u
 from utilities import model_loader
-from processing import background as bg
-import videoio.interface as vi
 from videoio import source, receiver
+
 
 def make_source(args) -> vi.ImageSource:
     t = args.get(u.ARG_SOURCE)
@@ -21,7 +22,7 @@ def make_receiver(args) -> vi.ImageReceiver:
     if t == u.DEST_IMAGE_FILE:
         return receiver.ImageFile(args.get(u.ARG_DEST_IMAGE_FILE))
     if t == u.DEST_WINDOW:
-        return receiver.CV2Windown("Fuel background substitution")
+        return receiver.CV2Window("Fuel background substitution")
     return None
 
 if __name__ == "__main__" :

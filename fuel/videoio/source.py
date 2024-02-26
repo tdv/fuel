@@ -1,5 +1,7 @@
 import cv2
+
 from videoio.interface import ImageSource
+
 
 class ImageFile(ImageSource):
     _img:cv2.Mat = None

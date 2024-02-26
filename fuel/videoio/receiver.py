@@ -1,8 +1,10 @@
 import cv2
 import pyvirtualcam as fcam
+
 from videoio.interface import ImageReceiver
 
-class CV2Windown(ImageReceiver):
+
+class CV2Window(ImageReceiver):
     _name:str = "Video output."
     def __init__(self, name:str=None):
         if name is not None and len(name) > 0:
@@ -21,7 +23,7 @@ class ImageFile(ImageReceiver):
     _filename = None
     def __init__(self, filename:str):
         if filename is None or len(filename) < 1:
-            raise ValueError("You can't use an empth path to same the result image.")
+            raise ValueError("You can't use an empty path to same the result image.")
         self._filename = filename
 
     def receive_image(self, image: cv2.Mat):

@@ -1,7 +1,9 @@
+from typing import Tuple
+
 import cv2
-import openvino as ov
 import numpy as np
-from typing import Tuple, Union
+import openvino as ov
+
 
 class Background:
     _model:ov.CompiledModel = None
@@ -48,7 +50,7 @@ class Background:
         output_image = np.where(condition, image_data, bg_image)
         return output_image.astype(np.uint8)
 
-    def _adjust_gamma(slef, img:cv2.Mat, gamma=1.0) ->cv2.Mat :
+    def _adjust_gamma(self, img:cv2.Mat, gamma=1.0) ->cv2.Mat :
         gamma = 1.0 / gamma
         tbl = np.array([((i / 255.0) ** gamma) * 255
                         for i in np.arange(0, 256)]).astype(np.uint8)
