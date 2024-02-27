@@ -1,0 +1,5 @@
+numpy==1.26.4
+opencv-python==4.9.0.80
+openvino==2023.3.0
+openvino-telemetry==2023.2.1
+pyfakewebcam==0.1.0
