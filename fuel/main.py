@@ -1,10 +1,10 @@
 import cv2
-
 import videoio.interface as vi
 from processing import background as bg
 from utilities import cmdline as u
 from utilities import model_loader
 from videoio import source, receiver
+from functools import partial
 
 
 def make_source(args) -> vi.ImageSource:
@@ -14,6 +14,7 @@ def make_source(args) -> vi.ImageSource:
     if t == u.SOURCE_WEBCAM:
         return source.WebCam(filename=args.get(u.ARG_SRC_WEBCAM))
     raise ValueError("Unknown source type \"{}\"".format(str(t)))
+
 
 def make_receiver(args) -> vi.ImageReceiver:
     t = args.get(u.ARG_DESTINATION)
@@ -37,7 +38,10 @@ if __name__ == "__main__" :
                               bg_filename=args.get(u.BACKGROUND_FILENAME)
                               )
 
-    while (cv2.waitKey(10) != 27):
-        img = src.get_image()
-        res = processor.process(img)
-        out.receive_image(res)
+    try:
+        while (cv2.waitKey(1) != 27):
+            img = src.get_image()
+            res = processor.process(img)
+            out.receive_image(res)
+    except KeyboardInterrupt:
+        print("Stop image processing.")

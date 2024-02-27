@@ -1,5 +1,5 @@
 import cv2
-import pyvirtualcam as fcam
+import pyfakewebcam as fcam
 
 from videoio.interface import ImageReceiver
 
@@ -16,7 +16,7 @@ class CV2Window(ImageReceiver):
     def receive_image(self, image:cv2.Mat):
         if image is None:
             raise RuntimeError("Failed to output an empty image.")
-        cv2.namedWindow(self._name, cv2.WINDOW_NORMAL)
+        cv2.namedWindow(self._name, cv2.WINDOW_FULLSCREEN)
         cv2.imshow(self._name, image)
 
 class ImageFile(ImageReceiver):
@@ -33,10 +33,9 @@ class ImageFile(ImageReceiver):
 class FakeCam(ImageReceiver):
     _cam = None
     def __init__(self, device:str, width:int = 800, height:int = 600, fps:int = 30):
-        self._cam = fcam.Camera(device=device, width=width, height=height, fps=fps)
+        self._cam = fcam.FakeWebcam(video_device=device,
+                                            width=width, height=height,
+                                            channels=3)
 
-    def __del__(self):
-        if self._cam is not None:
-            self._cam.close()
     def receive_image(self, image:cv2.Mat):
-        self._cam.send(image)
+        self._cam.schedule_frame(image)
