@@ -4,24 +4,23 @@ from processing import background as bg
 from utilities import cmdline as u
 from utilities import model_loader
 from videoio import source, receiver
-from functools import partial
 
 
 def make_source(args) -> vi.ImageSource:
-    t = args.get(u.ARG_SOURCE)
+    t = args.source
     if t == u.SOURCE_FILE:
-        return source.ImageFile(args.get(u.ARG_SRC_IMAGE_FILE))
+        return source.ImageFile(args.input_image_file)
     if t == u.SOURCE_WEBCAM:
-        return source.WebCam(filename=args.get(u.ARG_SRC_WEBCAM))
+        return source.WebCam(filename=args.webcam)
     raise ValueError("Unknown source type \"{}\"".format(str(t)))
 
 
 def make_receiver(args) -> vi.ImageReceiver:
-    t = args.get(u.ARG_DESTINATION)
+    t = args.destination
     if t == u.DEST_FAKE_WEBCAM:
-        return receiver.FakeCam(args.get(u.ARG_DEST_FAKECAM))
+        return receiver.FakeCam(args.fakecam)
     if t == u.DEST_IMAGE_FILE:
-        return receiver.ImageFile(args.get(u.ARG_DEST_IMAGE_FILE))
+        return receiver.ImageFile(args.output_image_file)
     if t == u.DEST_WINDOW:
         return receiver.CV2Window("Fuel background substitution")
     return None
@@ -32,10 +31,10 @@ if __name__ == "__main__" :
     out = make_receiver(args)
     model = model_loader.load_segmentation_model(None, "GPU")
     processor = bg.Background(model=model,
-                              blur=args.get(u.ARG_MODE) == u.MODE_BLUR,
-                              ksize=args.get(u.BLUR_KERNEL_SIZE),
+                              blur=args.mode == u.MODE_BLUR,
+                              ksize=args.blur_kernel_size,
                               bg_color=(120, 120, 120),
-                              bg_filename=args.get(u.BACKGROUND_FILENAME)
+                              bg_filename=args.background
                               )
 
     try:
