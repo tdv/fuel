@@ -28,8 +28,8 @@ Installation might not be straightforward and could require some system administ
 - Install a virtual environment for Python 3 (venv)
 - Clone repository  ```git clone https://github.com/tdv/fuel.git``` 
 - Go to the directory ```cd fuel``` 
-- Make a virtual environment using the command ```python3 -m venv init .```
-- Run the virtual environment using ```source ./bin/activate``` 
+- Make a virtual environment using the command ```python3 -m venv venv```
+- Run the virtual environment using ```source ./venv/bin/activate``` 
 - Install all required packages using ```pip3 install -r requirements.txt``` 
 
 **Congrats, you are ready to use this!**  
