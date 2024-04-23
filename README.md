@@ -23,8 +23,7 @@ The solution has been tested under Ubuntu 23.10 and might be to work on other pl
 Installation might not be straightforward and could require some system administration knowledge.
 - First of all, you need to [check](https://ark.intel.com/content/www/us/en/ark.html#@PanelLabel122139) if your CPU is on the list of OpenVINO supported CPUs 
 - [Install Intel OpenVINO Toolkit for Linux](https://docs.openvino.ai/2023.3/openvino_docs_install_guides_installing_openvino_apt.html) 
-- Install `v4l2loopback` and create a virtual webcam. It might be performed like ```sudo apt install -y v4l2loopback-dkms v4l-utils v4l2loopback-utils 
-sudo v4l2loopback-ctl add --exclusive-caps=1 --name="fake-cam" /dev/video3
+- Install `v4l2loopback` and create a virtual webcam. It might be performed like ```sudo apt install -y v4l2loopback-dkms v4l-utils v4l2loopback-utils``` and ```sudo v4l2loopback-ctl add --exclusive-caps=1 --name="fake-cam" /dev/video3
 v4l2-ctl --list-devices``` or quite close to.
 - Install Python 3 if you haven't done so already. (In my case, everything was tested on Python 3.11) 
 - Install a virtual environment for Python 3 (venv)
